@@ -1,8 +1,9 @@
 const express = require('express');
+const authRoute = require('./routes/authRoute');
 
 // // Create Table
-// const { sequelize } = require('./dbs/models/index');
-// sequelize.sync({ force: false });
+const { sequelize } = require('./dbs/models/index');
+sequelize.sync({ force: false });
 
 require('dotenv').config();
 const cors = require('cors');
@@ -16,6 +17,12 @@ app.use(
         extended: true,
     })
 );
+
+app.use('/auth', authRoute);
+
+app.use('/', (req, res, next) => {
+    res.status(200).json({ message: 'Hello' });
+});
 
 // Error handling
 app.use((req, res, next) => {
