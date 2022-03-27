@@ -27,17 +27,35 @@ module.exports = (sequelize, Datatypes) => {
             password: {
                 type: Datatypes.STRING,
             },
-            profileUrl: {
-                type: Datatypes.STRING,
-            },
             role: {
-                type: Datatypes.ENUM('user', 'admin'),
+                type: Datatypes.STRING,
+                defaultValue: 'user',
+            },
+            address: {
+                type: Datatypes.TEXT,
+            },
+            phoneNumber: {
+                type: Datatypes.STRING,
             },
         },
         {
             underscored: true,
         }
     );
+
+    User.associate = (models) => {
+        User.hasOne(models.Cart, {
+            foreignKey: {
+                name: 'userId',
+            },
+        });
+
+        User.hasMany(models.Order, {
+            foreignKey: {
+                name: 'userId',
+            },
+        });
+    };
 
     return User;
 };

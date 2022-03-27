@@ -92,14 +92,12 @@ exports.loginFb = async (req, res, next) => {
             where: { email },
         });
         if (!user) {
-            console.log(1);
             const newUser = await User.create({
                 firstName: response._tokenResponse.firstName,
                 lastName: response._tokenResponse.lastName,
                 email: response._tokenResponse.email,
                 role: 'user',
             });
-            console.log(2);
             const payload = {
                 firstName: newUser.firstName,
                 lastName: newUser.lastName,
@@ -107,14 +105,11 @@ exports.loginFb = async (req, res, next) => {
                 email: newUser.email,
                 role: newUser.role,
             };
-            console.log(3);
             const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
                 expiresIn: 60 * 60 * 24 * 30,
             });
-            console.log(4);
             return res.json({ message: 'Login success', token });
         }
-        console.log(5);
 
         // jwt
         const payload = {
@@ -124,7 +119,6 @@ exports.loginFb = async (req, res, next) => {
             email: user.email,
             role: user.role,
         };
-        console.log(6);
         const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
             expiresIn: 60 * 60 * 24 * 30,
         });
