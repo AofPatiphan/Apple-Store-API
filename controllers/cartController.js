@@ -56,3 +56,21 @@ exports.createCart = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.deleteCart = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const result = await Cart.destroy({
+            where: {
+                id,
+            },
+        });
+        if (result === 0) {
+            res.status(400).json({ message: 'cannot delete todo' });
+        }
+        res.status(204).json();
+    } catch (err) {
+        next(err);
+    }
+};
