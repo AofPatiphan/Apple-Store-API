@@ -4,7 +4,7 @@ const productRoute = require('./routes/productRoute');
 const cartRoute = require('./routes/cartRoute');
 const chargeRoute = require('./routes/chargeRoute');
 const orderRoute = require('./routes/orderRoute');
-
+const morgan = require('morgan');
 // // Create Table
 const { sequelize } = require('./dbs/models/index');
 sequelize.sync({ force: false });
@@ -22,7 +22,7 @@ app.use(
         extended: true,
     })
 );
-
+app.use(morgan('tiny'));
 app.use('/auth', authRoute);
 app.use('/products', productRoute);
 app.use('/carts', cartRoute);

@@ -14,7 +14,6 @@ exports.getAllProduct = async (req, res, next) => {
             include: [
                 {
                     model: ProductImage,
-                    // where: {  },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt'],
                     },
@@ -22,7 +21,6 @@ exports.getAllProduct = async (req, res, next) => {
 
                 {
                     model: Model,
-
                     include: [
                         {
                             model: Submodel,
@@ -37,14 +35,12 @@ exports.getAllProduct = async (req, res, next) => {
                 },
                 {
                     model: Category,
-                    // where: {  },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt'],
                     },
                 },
                 {
                     model: OrderItem,
-                    // where: {  },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt'],
                     },

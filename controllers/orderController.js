@@ -1,5 +1,11 @@
 const jwt = require('jsonwebtoken');
-const { Order, OrderItem, Product } = require('../dbs/models/index');
+const {
+    Order,
+    OrderItem,
+    Product,
+    Cart,
+    ProductImage,
+} = require('../dbs/models/index');
 
 exports.getOrder = async (req, res, next) => {
     try {
@@ -17,6 +23,14 @@ exports.getOrder = async (req, res, next) => {
                             attributes: {
                                 exclude: ['createdAt', 'updatedAt'],
                             },
+                            include: [
+                                {
+                                    model: ProductImage,
+                                    attributes: {
+                                        exclude: ['createdAt', 'updatedAt'],
+                                    },
+                                },
+                            ],
                         },
                     ],
                 },
@@ -44,15 +58,23 @@ exports.createOrder = async (req, res, next) => {
 
 exports.createOrderItem = async (req, res, next) => {
     try {
-        const { productId, price, amount } = req.body;
         const { id } = req.params;
-        await OrderItem.create({
-            orderId: id,
-            productId,
-            price,
-            amount,
+        const cart = await Cart.findAll({
+            where: { userId: req.user.id },
         });
-        res.status(200).json({ message: 'Create order success' });
+
+        console.log(cart);
+
+        await cart.map(async (item) => {
+            await OrderItem.create({
+                orderId: id,
+                productId: item.productId,
+                price: item.price * item.amount,
+                amount: item.amount,
+            });
+        });
+
+        res.status(200).json({ message: 'Create orderItem successful' });
     } catch (err) {
         next(err);
     }

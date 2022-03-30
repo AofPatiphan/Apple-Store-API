@@ -5,8 +5,10 @@ const router = express.Router();
 const cartController = require('../controllers/cartController');
 const auth = passport.authenticate('jwt-auth', { session: false });
 
-router.get('/:id', auth, cartController.getCartById);
+router.get('/', auth, cartController.getCart);
 router.post('/:id', auth, cartController.createCart);
-router.delete('/', auth, cartController.deleteCart);
+router.delete('/', auth, cartController.deleteAllCart);
+router.delete('/:id', auth, cartController.deleteCart);
+router.patch('/:id', auth, cartController.updateCart);
 
 module.exports = router;

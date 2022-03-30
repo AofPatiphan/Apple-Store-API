@@ -1,11 +1,9 @@
-const jwt = require('jsonwebtoken');
 const { Cart, Product, ProductImage } = require('../dbs/models/index');
 
-exports.getCartById = async (req, res, next) => {
+exports.getCart = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const cart = await Cart.findOne({
-            where: { id },
+        const cart = await Cart.findAll({
+            where: { userId: req.user.id },
             include: [
                 {
                     model: Product,
@@ -23,6 +21,7 @@ exports.getCartById = async (req, res, next) => {
                     },
                 },
             ],
+            order: [['id', 'DESC']],
         });
         res.status(200).json({ cart });
     } catch (err) {
@@ -57,7 +56,7 @@ exports.createCart = async (req, res, next) => {
     }
 };
 
-exports.deleteCart = async (req, res, next) => {
+exports.deleteAllCart = async (req, res, next) => {
     try {
         const result = await Cart.destroy({
             where: {
@@ -65,9 +64,46 @@ exports.deleteCart = async (req, res, next) => {
             },
         });
         if (result === 0) {
-            res.status(400).json({ message: 'cannot delete todo' });
+            res.status(400).json({ message: 'cannot delete cart' });
         }
         res.status(204).json();
+    } catch (err) {
+        next(err);
+    }
+};
+
+exports.deleteCart = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const result = await Cart.destroy({
+            where: {
+                id,
+            },
+        });
+        if (result === 0) {
+            res.status(400).json({ message: 'cannot delete cart' });
+        }
+        res.status(204).json();
+    } catch (err) {
+        next(err);
+    }
+};
+
+exports.updateCart = async (req, res, next) => {
+    try {
+        const { amount } = req.body;
+        const { id } = req.params;
+        await Cart.update(
+            {
+                amount,
+            },
+            {
+                where: {
+                    id,
+                },
+            }
+        );
+        res.send({ message: 'updated done' });
     } catch (err) {
         next(err);
     }
