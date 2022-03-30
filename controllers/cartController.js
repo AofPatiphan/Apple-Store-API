@@ -59,11 +59,9 @@ exports.createCart = async (req, res, next) => {
 
 exports.deleteCart = async (req, res, next) => {
     try {
-        const { id } = req.params;
-
         const result = await Cart.destroy({
             where: {
-                id,
+                userId: req.user.id,
             },
         });
         if (result === 0) {

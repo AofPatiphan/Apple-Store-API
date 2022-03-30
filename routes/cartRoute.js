@@ -7,6 +7,6 @@ const auth = passport.authenticate('jwt-auth', { session: false });
 
 router.get('/:id', auth, cartController.getCartById);
 router.post('/:id', auth, cartController.createCart);
-router.delete('/:id', auth, cartController.deleteCart);
+router.delete('/', auth, cartController.deleteCart);
 
 module.exports = router;

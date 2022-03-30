@@ -2,6 +2,8 @@ const express = require('express');
 const authRoute = require('./routes/authRoute');
 const productRoute = require('./routes/productRoute');
 const cartRoute = require('./routes/cartRoute');
+const chargeRoute = require('./routes/chargeRoute');
+const orderRoute = require('./routes/orderRoute');
 
 // // Create Table
 const { sequelize } = require('./dbs/models/index');
@@ -24,6 +26,8 @@ app.use(
 app.use('/auth', authRoute);
 app.use('/products', productRoute);
 app.use('/carts', cartRoute);
+app.use('/charge', chargeRoute);
+app.use('/orders', orderRoute);
 
 app.use('/', (req, res, next) => {
     res.status(200).json({ message: 'Hello' });
