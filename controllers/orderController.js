@@ -5,6 +5,7 @@ const {
     Product,
     Cart,
     ProductImage,
+    User,
 } = require('../dbs/models/index');
 
 exports.getOrder = async (req, res, next) => {
@@ -34,7 +35,14 @@ exports.getOrder = async (req, res, next) => {
                         },
                     ],
                 },
+                {
+                    model: User,
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt', 'password'],
+                    },
+                },
             ],
+            order: [['id', 'DESC']],
         });
         res.status(200).json({ orders });
     } catch (err) {
@@ -62,8 +70,6 @@ exports.createOrderItem = async (req, res, next) => {
         const cart = await Cart.findAll({
             where: { userId: req.user.id },
         });
-
-        console.log(cart);
 
         await cart.map(async (item) => {
             await OrderItem.create({
