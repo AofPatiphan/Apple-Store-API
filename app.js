@@ -1,5 +1,6 @@
 const express = require('express');
 const authRoute = require('./routes/authRoute');
+const userRoute = require('./routes/userRoute');
 const productRoute = require('./routes/productRoute');
 const cartRoute = require('./routes/cartRoute');
 const chargeRoute = require('./routes/chargeRoute');
@@ -24,6 +25,7 @@ app.use(
 );
 app.use(morgan('tiny'));
 app.use('/auth', authRoute);
+app.use('/users', userRoute);
 app.use('/products', productRoute);
 app.use('/carts', cartRoute);
 app.use('/charge', chargeRoute);
